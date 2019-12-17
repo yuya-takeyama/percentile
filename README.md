@@ -5,7 +5,7 @@ Show percentile of input numbers.
 ## Installation
 
 ```
-$ go get github.com/yuya-takeyama/percentile
+$ go get github.com/fluktuid/percentile
 ```
 
 ## Usage
