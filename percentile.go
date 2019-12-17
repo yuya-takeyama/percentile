@@ -6,6 +6,7 @@ import (
 	"io"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 func percentile(r io.Reader, stdout io.Writer, stderr io.Writer, opts Options) error {
@@ -24,7 +25,9 @@ func percentile(r io.Reader, stdout io.Writer, stderr io.Writer, opts Options) e
 			panic(err)
 		}
 
-		f, convErr := strconv.ParseFloat(string(line), 64)
+		lineWithDot := strings.Replace(string(line), ",", ".", -1)
+
+		f, convErr := strconv.ParseFloat(lineWithDot, 64)
 		if convErr != nil {
 			fmt.Fprintf(stderr, "number conversion error: %s\n", convErr)
 			continue
