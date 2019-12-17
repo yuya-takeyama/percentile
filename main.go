@@ -53,17 +53,6 @@ func main() {
 	go wrapper(os.Stdout, stdoutCh, exitCh)
 
 	Ntimes(cnt, cmdName, cmdArgs, os.Stdin, os.Stderr, stdoutCh, opts.Parallels)
-
-//	r, err := argf.From(args)
-//	if err != nil {
-//		panic(err)
-//	}
-
-//	err = percentile(r, os.Stdout, os.Stderr, opts)
-//	if err != nil {
-//		panic(err)
-//	}
-
 	exitCh <- true
 }
 
@@ -72,9 +61,9 @@ func wrapper(stdout io.Writer, stdoutCh chan io.ReadWriter, exitCh chan bool) {
 		select {
 		case r := <-stdoutCh:
 			err := percentile(r, stdout, os.Stderr, opts)
-				if err != nil {
-					panic(err)
-				}
+			if err != nil {
+				panic(err)
+			}
 		case <-exitCh:
 			return
 		}

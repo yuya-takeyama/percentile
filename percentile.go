@@ -56,11 +56,11 @@ func percentileN(numbers *sort.Float64Slice, l, n int) float64 {
 }
 
 func printPercentileN(w io.Writer, numbers *sort.Float64Slice, l, n int) {
-	fmt.Fprintf(w, "%d%%:\t%s\n", n, strconv.FormatFloat(percentileN(numbers, l, n), 'g', 16, 64))
+	fmt.Fprintf(w, "%d%%:\t%s\n", n, strconv.FormatFloat(percentileN(numbers, l, n), 'g', 5, 64))
 }
 
 func deletePreviouslines(w io.Writer, count int) {
 	for i := 0; i < count; i++ {
-		fmt.Fprintf(w, "\r\b")
+		fmt.Fprintf(w, "\033[2K\r\b")
 	}
 }
