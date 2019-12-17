@@ -40,7 +40,7 @@ func percentile(r io.Reader, stdout io.Writer, stderr io.Writer, opts Options) e
 	l := len(numbers)
 
 	if l > 2 {
-		deletePreviouslines(stdout, 10)
+		deletePreviouslines(stdout, 9)
 	}
 	if l > 1 {
 		for _, value := range values {
@@ -64,6 +64,6 @@ func printPercentileN(w io.Writer, numbers *sort.Float64Slice, l, n int) {
 
 func deletePreviouslines(w io.Writer, count int) {
 	for i := 0; i < count; i++ {
-		fmt.Fprintf(w, "\033[2K\r\b")
+		fmt.Fprint(w, "\033[F\033[K")
 	}
 }

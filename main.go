@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-const AppName = "numstat"
+const AppName = "percentime"
 
 type Options struct {
 	Parallels   int  `short:"p" long:"parallels" description:"Parallel degree of execution" default:"1"`
