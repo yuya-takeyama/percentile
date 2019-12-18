@@ -14,6 +14,7 @@ const AppName = "percentime"
 type Options struct {
 	Parallels   int  `short:"p" long:"parallels" description:"Parallel degree of execution" default:"1"`
 	ShowVersion bool `short:"v" long:"version" description:"Show version"`
+	UseCmdResp  bool `short:"c" long:"commandResponse" description:"Use command Response instead of measured time"`
 }
 
 var opts Options
@@ -43,7 +44,7 @@ func main() {
 	cmdName := args[1]
 	cmdArgs := args[2:]
 
-	stdoutCh := make(chan io.ReadWriter)
+	stdoutCh := make(chan float64)
 	exitCh := make(chan bool)
 
 	if err != nil {
@@ -56,7 +57,7 @@ func main() {
 	exitCh <- true
 }
 
-func wrapper(stdout io.Writer, stdoutCh chan io.ReadWriter, exitCh chan bool) {
+func wrapper(stdout io.Writer, stdoutCh chan float64, exitCh chan bool) {
 	for {
 		select {
 		case r := <-stdoutCh:

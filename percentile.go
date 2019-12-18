@@ -1,40 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"sort"
 	"strconv"
-	"strings"
 )
 
-func percentile(r io.Reader, stdout io.Writer, stderr io.Writer, opts Options) error {
+func percentile(r float64, stdout io.Writer, stderr io.Writer, opts Options) error {
 	if opts.ShowVersion {
 		io.WriteString(stdout, fmt.Sprintf("%s v%s, build %s\n", AppName, Version, GitCommit))
 		return nil
 	}
 
-	reader := bufio.NewReader(r)
-	var line []byte
-	var err error
-	for {
-		if line, _, err = reader.ReadLine(); err == io.EOF {
-			break
-		} else if err != nil {
-			panic(err)
-		}
-
-		lineWithDot := strings.Replace(string(line), ",", ".", -1)
-
-		f, convErr := strconv.ParseFloat(lineWithDot, 64)
-		if convErr != nil {
-			fmt.Fprintf(stderr, "number conversion error: %s\n", convErr)
-			continue
-		}
-
-		numbers = append(numbers, f)
-	}
+	numbers = append(numbers, r)
 
 	sort.Sort(numbers)
 	l := len(numbers)
