@@ -1,32 +1,32 @@
-# percentile
+# percentime
 
-Show percentile of input numbers.
+Executes a command n times and shows percentile of input numbers.
+
+This Project is based on
+- [yuya-takeyama/ntimes](https://github.com/yuya-takeyama/ntimes)
+- [yuya-takeyama/percentile](https://github.com/yuya-takeyama/percentile)
 
 ## Installation
 
 ```
-$ go get github.com/fluktuid/percentile
+$ go get github.com/fluktuid/percentime
 ```
 
 ## Usage
 
-```
-$ seq 100 | percentile
-50%:    50
-66%:    66
-75%:    75
-80%:    80
-90%:    90
-95%:    95
-98%:    98
-99%:    99
-100%:   100
+``` bash
+$ percentime 100 -- curl -s -o /dev/null -w "%{time_total}" google.com
+50%:	0.061504
+66%:	0.063227
+75%:	0.064522
+80%:	0.065158
+90%:	0.066899
+95%:	0.07377
+98%:	0.07851
+99%:	0.082946
+100%:	0.096252
 ```
 
 ## License
 
 The MIT License
-
-## Author
-
-Yuya Takeyama
