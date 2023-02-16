@@ -5,7 +5,7 @@ Show percentile of input numbers.
 ## Installation
 
 ```
-$ go get github.com/yuya-takeyama/percentile
+$ go install github.com/yuya-takeyama/percentile@latest
 ```
 
 ## Usage
@@ -22,6 +22,11 @@ $ seq 100 | percentile
 99%:    99
 100%:   100
 ```
+
+## Blog articles
+
+* en: [How I measure Response Times of Web APIs using curl](https://dev.to/yuyatakeyama/how-i-measure-response-times-of-web-apis-using-curl-6nh)
+* ja: [curl でサッと HTTP ベンチマーク](https://qiita.com/yuya_takeyama/items/baf48a3f643e743a46b4)
 
 ## License
 
