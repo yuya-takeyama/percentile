@@ -12,7 +12,7 @@ import (
 	"github.com/yuya-takeyama/argf"
 )
 
-const AppName = "numstat"
+const AppName = "percentile"
 
 type Options struct {
 	ShowVersion bool   `short:"v" long:"version" description:"Show version"`
