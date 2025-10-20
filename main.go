@@ -15,7 +15,8 @@ import (
 const AppName = "numstat"
 
 type Options struct {
-	ShowVersion bool `short:"v" long:"version" description:"Show version"`
+	ShowVersion bool   `short:"v" long:"version" description:"Show version"`
+	Algorithm   string `short:"a" long:"algorithm" description:"Algorithm to use (simple, linear-interpolation)" default:"linear-interpolation"`
 }
 
 var opts Options
@@ -72,15 +73,15 @@ func percentile(r io.Reader, stdout io.Writer, stderr io.Writer, opts Options) e
 	sort.Sort(numbers)
 	l := len(numbers)
 
-	printPercentileN(stdout, &numbers, l, 50)
-	printPercentileN(stdout, &numbers, l, 66)
-	printPercentileN(stdout, &numbers, l, 75)
-	printPercentileN(stdout, &numbers, l, 80)
-	printPercentileN(stdout, &numbers, l, 90)
-	printPercentileN(stdout, &numbers, l, 95)
-	printPercentileN(stdout, &numbers, l, 98)
-	printPercentileN(stdout, &numbers, l, 99)
-	printPercentileN(stdout, &numbers, l, 100)
+	printPercentileN(stdout, &numbers, l, 50, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 66, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 75, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 80, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 90, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 95, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 98, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 99, opts.Algorithm)
+	printPercentileN(stdout, &numbers, l, 100, opts.Algorithm)
 
 	return nil
 }
@@ -92,6 +93,48 @@ func percentileN(numbers *sort.Float64Slice, l, n int) float64 {
 	return ns[i]
 }
 
-func printPercentileN(w io.Writer, numbers *sort.Float64Slice, l, n int) {
-	fmt.Fprintf(w, "%d%%:\t%s\n", n, strconv.FormatFloat(percentileN(numbers, l, n), 'g', 16, 64))
+// percentileNLinearInterpolation calculates percentile with linear interpolation
+// This provides more accurate results, especially for datasets where exact percentiles
+// fall between two data points
+func percentileNLinearInterpolation(numbers *sort.Float64Slice, l, n int) float64 {
+	if l == 0 {
+		return 0
+	}
+	if l == 1 {
+		return (*numbers)[0]
+	}
+
+	ns := *numbers
+
+	// Calculate the rank using linear interpolation formula
+	// rank = p/100 * (n-1) where p is the percentile and n is the number of elements
+	rank := float64(n) / 100.0 * float64(l-1)
+
+	lower := int(rank)
+	upper := lower + 1
+
+	// Handle edge cases
+	if lower < 0 {
+		lower = 0
+	}
+	if upper >= l {
+		return ns[l-1]
+	}
+
+	// Linear interpolation between the two adjacent values
+	fraction := rank - float64(lower)
+	return ns[lower] + fraction*(ns[upper]-ns[lower])
+}
+
+func printPercentileN(w io.Writer, numbers *sort.Float64Slice, l, n int, algorithm string) {
+	var value float64
+	switch algorithm {
+	case "simple":
+		value = percentileN(numbers, l, n)
+	case "linear-interpolation":
+		value = percentileNLinearInterpolation(numbers, l, n)
+	default:
+		value = percentileNLinearInterpolation(numbers, l, n)
+	}
+	fmt.Fprintf(w, "%d%%:\t%s\n", n, strconv.FormatFloat(value, 'g', 16, 64))
 }
