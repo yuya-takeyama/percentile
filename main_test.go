@@ -146,7 +146,7 @@ func TestPercentileFunction(t *testing.T) {
 			opts: Options{
 				ShowVersion: true,
 			},
-			expectedContains: []string{"numstat v0.0.1"},
+			expectedContains: []string{AppName, "v0.0.1"},
 		},
 	}
 
